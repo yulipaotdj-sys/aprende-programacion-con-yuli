@@ -220,6 +220,9 @@ dialog::backdrop{background:rgba(10,12,40,.6)}
 .dlg-top h2{font:600 20px/1.2 var(--font-display);margin:0}
 #certCanvas{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:50;background:var(--fg);color:var(--bg);font-weight:700;font-size:15px;padding:10px 16px;border-radius:12px;max-width:min(92vw,420px);text-align:center}
+.foot{padding-block:4px 36px;text-align:center;font-size:14px;color:var(--muted)}
+.foot a{color:var(--muted);font-weight:700}
+.foot a:hover{color:var(--fg)}
 </style>
 
 
@@ -238,6 +241,7 @@ dialog::backdrop{background:rgba(10,12,40,.6)}
   </div>
 </header>
 <main id="app" class="inner"></main>
+<footer class="foot inner"><a href="privacidad.html">Política de privacidad</a> · <a href="terminos.html">Términos de uso</a> · <a href="mailto:yulipaotdj@gmail.com">Contacto</a></footer>
 
 <dialog id="certDlg" aria-labelledby="certTitle">
   <div class="dlg-in">
