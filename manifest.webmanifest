@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "Aprende programación con Yuli",
+  "short_name": "Aprende con Yuli",
+  "description": "Aprende HTML, CSS y JavaScript con lecciones, ejemplos y retos. El código va arriba y el resultado abajo.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F4FB",
+  "theme_color": "#7B5BE8",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

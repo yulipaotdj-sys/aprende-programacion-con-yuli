@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F6F4FB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12152B" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Aprende HTML, CSS y JavaScript con lecciones, ejemplos y retos. El código va arriba y el resultado abajo.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Aprende con Yuli">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Aprende programación con Yuli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Diseño: cabecera fija con el logo. En pantalla ancha la guía de la lección va a la izquierda y el taller a la derecha (código arriba, resultado abajo). En el celular todo se apila en ese mismo orden. Colores tomados del logo: azul noche, violeta, naranja. */
+:root{
+  --bg:#F6F4FB; --surface:#FFFFFF; --surface-2:#EFEBFA; --fg:#1C2559; --muted:#59608C; --line:#DDD8EE;
+  --brand:#7B5BE8; --brand-fg:#FFFFFF; --brand-soft:#E9E3FC; --accent:#FF7B4A; --accent-ink:#C64A18;
+  --ok:#157F55; --ok-soft:#DDF3E8; --bad:#BF3030; --bad-soft:#FBE3E3; --warn-soft:#FFF0D9;
+  --c-html:#7B5BE8; --c-css:#12807F; --c-js:#C2650F;
+  --code-bg:#FBFAFF; --code-fg:#1C2559; --gutter:#8D93B8;
+  --t-tag:#6B3FD6; --t-attr:#B4531A; --t-str:#13795B; --t-com:#7B82AA; --t-num:#C2410C; --t-kw:#6B3FD6; --t-fn:#1D5FA8; --t-prop:#B4531A;
+  --font-display:'Fredoka',ui-rounded,'Nunito',system-ui,sans-serif;
+  --font-body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-code:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12152B; --surface:#1B1F3D; --surface-2:#242957; --fg:#ECEBFA; --muted:#A5AAD3; --line:#303667;
+    --brand:#9B84F5; --brand-fg:#12152B; --brand-soft:#2B2660; --accent:#FF8F63; --accent-ink:#FF9A72;
+    --ok:#4CD197; --ok-soft:#173A33; --bad:#FF8C8C; --bad-soft:#41222C; --warn-soft:#3B3020;
+    --c-html:#A793FA; --c-css:#3FC4C2; --c-js:#FFA254;
+    --code-bg:#14172F; --code-fg:#E6E7FA; --gutter:#6E74A6;
+    --t-tag:#B7A2FF; --t-attr:#FFB07A; --t-str:#6FE0B0; --t-com:#7E85B5; --t-num:#FFA06B; --t-kw:#C4B0FF; --t-fn:#7FC0FF; --t-prop:#FFB07A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12152B; --surface:#1B1F3D; --surface-2:#242957; --fg:#ECEBFA; --muted:#A5AAD3; --line:#303667;
+  --brand:#9B84F5; --brand-fg:#12152B; --brand-soft:#2B2660; --accent:#FF8F63; --accent-ink:#FF9A72;
+  --ok:#4CD197; --ok-soft:#173A33; --bad:#FF8C8C; --bad-soft:#41222C; --warn-soft:#3B3020;
+  --c-html:#A793FA; --c-css:#3FC4C2; --c-js:#FFA254;
+  --code-bg:#14172F; --code-fg:#E6E7FA; --gutter:#6E74A6;
+  --t-tag:#B7A2FF; --t-attr:#FFB07A; --t-str:#6FE0B0; --t-com:#7E85B5; --t-num:#FFA06B; --t-kw:#C4B0FF; --t-fn:#7FC0FF; --t-prop:#FFB07A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+a{color:inherit}
+code{font-family:var(--font-code);font-size:.9em;background:var(--surface-2);padding:.1em .4em;border-radius:6px}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.inner{max-width:1200px;margin-left:auto;margin-right:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.muted{color:var(--muted)}
+
+/* Cabecera */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .inner{display:flex;align-items:center;gap:12px;padding-block:8px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg);min-width:0;flex:1}
+.brand img{width:44px;height:44px;border-radius:50%;flex:none}
+.brand-name{font:600 clamp(15px,3.8vw,20px)/1.15 var(--font-display);min-width:0}
+.brand-name em{font-style:normal;color:var(--accent-ink)}
+.stats{display:flex;gap:8px;flex:none}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font:700 13px var(--font-body);white-space:nowrap}
+.pill svg{width:15px;height:15px;flex:none}
+
+/* Botones */
+.btn{font:700 14px var(--font-body);min-height:36px;padding:7px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+.btn:hover{border-color:var(--brand)}
+.btn.primary{background:var(--brand);color:var(--brand-fg);border-color:transparent}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:32px;padding:5px 10px;font-size:13px}
+.btn.lg{min-height:46px;padding:10px 22px;font-size:16px}
+.btn svg{width:14px;height:14px;flex:none}
+
+/* Inicio */
+.hero{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;padding-block:28px 20px}
+.hero-logo{width:clamp(120px,28vw,170px);height:auto;aspect-ratio:1;flex:none;max-width:100%}
+.hero-copy{flex:1 1 300px;min-width:0}
+.hero h1{font:600 clamp(28px,5.4vw,44px)/1.12 var(--font-display);margin:0 0 10px;text-wrap:balance}
+.hero p{margin:0 0 18px;max-width:56ch;color:var(--muted);font-size:17px}
+.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;padding-block:8px 4px}
+.course{text-align:left;font:inherit;color:inherit;background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-width:0}
+.course[aria-selected="true"]{border-color:var(--brand)}
+.course[aria-disabled="true"]{cursor:default;opacity:.65;border-style:dashed}
+.course h3{font:600 20px/1.2 var(--font-display);margin:0}
+.course p{margin:0;color:var(--muted);font-size:14px}
+.badge{display:inline-flex;align-self:flex-start;font:700 12px var(--font-code);letter-spacing:.04em;padding:3px 8px;border-radius:8px;background:var(--surface-2);color:var(--muted)}
+.badge.html{color:var(--c-html);background:color-mix(in srgb,var(--c-html) 14%,transparent)}
+.badge.css{color:var(--c-css);background:color-mix(in srgb,var(--c-css) 14%,transparent)}
+.badge.js{color:var(--c-js);background:color-mix(in srgb,var(--c-js) 14%,transparent)}
+.prog{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prog i{display:block;height:100%;border-radius:inherit;background:var(--c)}
+.prog-txt{font-size:13px;color:var(--muted);font-weight:700}
+.path{padding-block:20px 40px}
+.path h2{font:600 24px/1.2 var(--font-display);margin:0 0 2px}
+.path>p{margin:0 0 14px}
+.lessons{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.lessons li+li{border-top:1px solid var(--line)}
+.lrow{display:flex;align-items:center;gap:14px;padding:12px 14px;text-decoration:none;min-height:64px}
+.lrow:hover{background:var(--surface-2)}
+.num{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:700 15px var(--font-display);background:var(--surface-2);color:var(--fg)}
+.num.done{background:var(--ok);color:#fff}
+.num svg{width:18px;height:18px}
+.ltxt{flex:1;min-width:0;display:flex;flex-direction:column}
+.ltxt strong{font-weight:800}
+.ltxt small{color:var(--muted);font-size:14px}
+.xp{flex:none;font:700 12px var(--font-body);padding:3px 9px;border-radius:99px;background:var(--brand-soft);color:var(--fg)}
+.xp.ok{background:var(--ok-soft);color:var(--ok)}
+
+/* Lección */
+.lesson{display:grid;gap:16px;padding-block:16px 32px}
+.guide{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;min-width:0}
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:14px;color:var(--muted);text-decoration:none;margin-bottom:10px}
+.back:hover{color:var(--fg)}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:700}
+.chip-ok{background:var(--ok-soft);color:var(--ok);padding:2px 9px;border-radius:99px}
+.ltitle{font:600 clamp(24px,4vw,30px)/1.15 var(--font-display);margin:8px 0 14px;text-wrap:balance}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--surface-2);border-radius:12px;margin-bottom:14px}
+.seg button{font:700 14px var(--font-body);padding:8px 10px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;min-height:38px}
+.seg button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(20,20,60,.15)}
+.guide p{margin:0 0 12px}
+.analogy{background:var(--brand-soft);border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.analogy b{display:block;font:700 12px var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--fg);margin-bottom:4px}
+.analogy p{margin:0}
+.task{font-weight:700;font-size:17px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.fb{border-radius:12px;padding:10px 12px;font-size:15px;margin-bottom:10px}
+.fb.ok{background:var(--ok-soft);color:var(--ok);font-weight:700;animation:pop .25s ease-out}
+.fb.bad{background:var(--bad-soft);color:var(--bad);font-weight:700}
+.fb.wait{background:var(--surface-2);color:var(--muted)}
+.fb a{color:inherit}
+.note{background:var(--warn-soft);border-radius:12px;padding:10px 12px;font-size:15px;margin-bottom:10px}
+.sol{margin:0 0 10px;padding:10px 12px;background:var(--code-bg);color:var(--code-fg);border:1px solid var(--line);border-radius:12px;font:13px/1.6 var(--font-code);overflow-x:auto;white-space:pre}
+.pn{display:flex;justify-content:space-between;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+@keyframes pop{from{transform:scale(.97);opacity:.4}to{transform:none;opacity:1}}
+
+/* Taller: código arriba, resultado abajo */
+.bench{display:flex;flex-direction:column;gap:14px;min-width:0}
+.pane{display:flex;flex-direction:column;min-height:0;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.pane.editor{height:clamp(240px,42vh,380px)}
+.pane.result{height:clamp(260px,40vh,400px)}
+.bar{display:flex;align-items:center;gap:8px;padding:6px 10px;min-height:46px;border-bottom:1px solid var(--line);flex:none}
+.file{font:600 13px var(--font-code);color:var(--muted)}
+.sp{flex:1}
+.live{display:none;font-size:12px;color:var(--muted);font-weight:700}
+.status{font:700 12px var(--font-body);padding:3px 10px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
+.status.ok{background:var(--ok-soft);color:var(--ok)}
+.status.err{background:var(--bad-soft);color:var(--bad)}
+.ed{flex:1;min-height:0;display:grid;grid-template-columns:auto minmax(0,1fr);background:var(--code-bg)}
+.gut{font:13.5px/21px var(--font-code);padding:12px 8px 48px 12px;text-align:right;color:var(--gutter);overflow:hidden;user-select:none;white-space:pre;border-right:1px solid var(--line)}
+.code{position:relative;min-width:0}
+.hl,.ta{font:13.5px/21px var(--font-code);padding:12px 14px 48px;margin:0;border:0;tab-size:2;white-space:pre;letter-spacing:0;word-spacing:0}
+.hl{position:absolute;inset:0;overflow:hidden;pointer-events:none;color:var(--code-fg)}
+.ta{position:absolute;inset:0;width:100%;height:100%;background:transparent;color:transparent;caret-color:var(--fg);resize:none;overflow:auto;outline:none;scrollbar-width:thin;-webkit-text-fill-color:transparent}
+.ta::selection{background:color-mix(in srgb,var(--brand) 40%,transparent)}
+.ed:focus-within{box-shadow:inset 0 0 0 2px var(--brand)}
+.t-com{color:var(--t-com);font-style:italic}.t-str{color:var(--t-str)}.t-tag{color:var(--t-tag)}.t-attr{color:var(--t-attr)}
+.t-num{color:var(--t-num)}.t-kw{color:var(--t-kw)}.t-fn{color:var(--t-fn)}.t-prop{color:var(--t-prop)}
+.out{flex:1;min-height:0;display:flex;flex-direction:column}
+.out iframe{flex:1;min-height:0;width:100%;border:0;background:#fff;display:block}
+.out.no-frame iframe{display:none}
+.con{flex:none;max-height:46%;overflow:auto;background:var(--code-bg);color:var(--code-fg);border-top:1px solid var(--line);font:13.5px/1.7 var(--font-code);padding:8px 12px}
+.out.no-frame .con{flex:1;max-height:none;border-top:0}
+.out.no-con .con{display:none}
+.ln{white-space:pre-wrap;overflow-wrap:anywhere}
+.ln::before{content:"› ";color:var(--gutter)}
+.ln.error{color:var(--bad)}.ln.warn{color:var(--c-js)}
+.ln.empty{color:var(--muted);font-style:italic}.ln.empty::before{content:""}
+
+@media (min-width:520px){.live{display:inline}}
+@media (max-width:600px){
+  .hl,.ta,.gut{font-size:16px;line-height:24px}
+}
+@media (min-width:960px){
+  .lesson{grid-template-columns:minmax(320px,400px) minmax(0,1fr);align-items:start}
+  .bench{position:sticky;top:calc(env(safe-area-inset-top,0px) + 68px);height:calc(100vh - 92px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+  .pane.editor,.pane.result{height:auto;flex:1 1 0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+
+</head>
+<body>
+<header class="top">
+  <div class="inner">
+    <a class="brand" href="#" aria-label="Aprende programación con Yuli, ir al inicio">
+      <img id="brandLogo" alt="" width="44" height="44">
+      <span class="brand-name">Aprende programación <em>con Yuli</em></span>
+    </a>
+    <div class="stats">
+      <span class="pill" id="streak" title="Días seguidos que has entrado"></span>
+      <span class="pill" id="xp" title="Puntos de experiencia"></span>
+    </div>
+  </div>
+</header>
+<main id="app" class="inner"></main>
+
+<script>
+(function(){
+'use strict';
+var LOGO='logo.webp';
+var LT='\x3C';
+
+/* ---------- Contenido de las lecciones ---------- */
+var LANG={
+  html:{name:'HTML',tag:'El esqueleto de la página',file:'index.html'},
+  css:{name:'CSS',tag:'La pintura y la decoración',file:'estilos.css'},
+  js:{name:'JavaScript',tag:'El cerebro que hace que todo funcione',file:'programa.js'}
+};
+var XP_PER=20;
+
+var LESSONS=[
+/* ---------------- HTML ---------------- */
+{id:'html-1',lang:'html',title:'Tu primera página',sub:'Títulos y párrafos',
+ explain:'HTML le dice al navegador qué hay en la página. Usas <strong>etiquetas</strong>: una se abre con <code>&lt;h1&gt;</code> y se cierra con <code>&lt;/h1&gt;</code>. La etiqueta <code>h1</code> es el título principal y <code>p</code> es un párrafo.',
+ analogy:'Es como una casa sin pintar. El HTML pone las paredes, las puertas y el techo. Cómo se ve todo lo decides después, con CSS.',
+ example:'<h1>Hola, mundo</h1>\n<p>Esta es mi primera página web.</p>\n',
+ task:'Escribe un título <h1> con tu nombre y un párrafo <p> que cuente qué quieres aprender.',
+ starter:LT+'!-- Escribe aquí tu título y tu párrafo -->\n',
+ hint:'Empieza con <h1>Tu nombre</h1> y en la línea de abajo escribe <p>Quiero aprender...</p>.',
+ solution:'<h1>Yuli</h1>\n<p>Quiero aprender a programar mis propias apps.</p>\n',
+ test:(doc)=>{
+   const h=doc.querySelector('h1'),p=doc.querySelector('p');
+   if(!h||!h.textContent.trim()) return 'Falta un título <h1> con tu nombre.';
+   if(!p||!p.textContent.trim()) return 'Falta un párrafo <p> con texto.';
+   return true;
+ }},
+{id:'html-2',lang:'html',title:'Listas',sub:'Con puntos y con números',
+ explain:'Para hacer una lista usa <code>&lt;ul&gt;</code>. Cada elemento va dentro de <code>&lt;li&gt;</code>. Si quieres números en vez de puntos, usa <code>&lt;ol&gt;</code>.',
+ analogy:'Es tu lista del mercado: el papel es la lista (ul) y cada renglón es un producto (li).',
+ example:'<h2>Mi lista del mercado</h2>\n<ul>\n  <li>Arroz</li>\n  <li>Frijoles</li>\n  <li>Plátano</li>\n</ul>\n',
+ task:'Haz una lista <ul> con al menos 3 cosas que quieras aprender.',
+ starter:'<h2>Quiero aprender</h2>\n<ul>\n  \n</ul>\n',
+ hint:'Cada cosa va en su propia línea: <li>HTML</li>',
+ solution:'<h2>Quiero aprender</h2>\n<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n  <li>JavaScript</li>\n</ul>\n',
+ test:(doc)=>{
+   const ul=doc.querySelector('ul,ol');
+   if(!ul) return 'Falta la lista: usa <ul>.';
+   const li=[].slice.call(ul.querySelectorAll('li')).filter(function(x){return x.textContent.trim();});
+   if(li.length<3) return 'Escribe al menos 3 elementos <li> con texto. Ahora tienes '+li.length+'.';
+   return true;
+ }},
+{id:'html-3',lang:'html',title:'Enlaces',sub:'Puertas hacia otras páginas',
+ explain:'Un enlace usa la etiqueta <code>&lt;a&gt;</code>. El atributo <code>href</code> dice a dónde lleva. Lo que escribes entre las etiquetas es el texto que se toca. En esta vista previa los enlaces no se abren, pero en una página real sí.',
+ analogy:'Es una puerta: el texto es el letrero y el href es la dirección de la casa a la que llegas.',
+ example:'<p>Lee más en <a href="https://es.wikipedia.org">Wikipedia</a>.</p>\n',
+ task:'Crea un enlace <a> con un texto y un href que empiece por https://',
+ starter:'<p>Mi sitio favorito es </p>\n',
+ hint:'Se escribe así: <a href="https://...">Texto</a>',
+ solution:'<p>Mi sitio favorito es <a href="https://developer.mozilla.org">MDN</a>.</p>\n',
+ test:(doc)=>{
+   const a=doc.querySelector('a');
+   if(!a) return 'Falta el enlace <a>.';
+   if(!a.textContent.trim()) return 'El enlace necesita un texto que se pueda tocar.';
+   if(!/^https?:\/\//.test(a.getAttribute('href')||'')) return 'El href debe empezar por https://';
+   return true;
+ }},
+{id:'html-4',lang:'html',title:'Botones y campos',sub:'Para que la persona escriba y toque',
+ explain:'Con <code>&lt;input&gt;</code> la persona escribe y con <code>&lt;button&gt;</code> toca. <code>&lt;label&gt;</code> es el nombre del campo. El <code>placeholder</code> es la pista gris que se ve antes de escribir.',
+ analogy:'Es un formulario en papel: cada línea tiene un nombre (label) y un espacio para escribir (input).',
+ example:'<label for="nombre">Tu nombre</label>\n<input id="nombre" placeholder="Escribe aquí">\n<button>Enviar</button>\n',
+ task:'Haz un formulario con un <label>, un <input> con placeholder y un <button>.',
+ starter:LT+'!-- Escribe tu label, tu input y tu botón -->\n',
+ hint:'El input no lleva etiqueta de cierre: <input placeholder="Tu correo">',
+ solution:'<label for="correo">Tu correo</label>\n<input id="correo" placeholder="nombre@correo.com">\n<button>Suscribirme</button>\n',
+ test:(doc)=>{
+   if(!doc.querySelector('label')) return 'Falta un <label>.';
+   const i=doc.querySelector('input');
+   if(!i) return 'Falta un <input>.';
+   if(!i.getAttribute('placeholder')) return 'Agrega un placeholder al input, por ejemplo placeholder="Tu nombre".';
+   if(!doc.querySelector('button')) return 'Falta un <button>.';
+   return true;
+ }},
+{id:'html-5',lang:'html',title:'Secciones de la página',sub:'header, main y footer',
+ explain:'Para ordenar una página se usan secciones con nombre: <code>header</code> es la parte de arriba, <code>main</code> es el contenido principal y <code>footer</code> es el final.',
+ analogy:'Es como un periódico: arriba el encabezado, en el medio las noticias y abajo los datos finales.',
+ example:'<header>\n  <h1>Mi blog</h1>\n</header>\n<main>\n  <p>Aquí va lo importante.</p>\n</main>\n<footer>\n  <p>Hecho con cariño</p>\n</footer>\n',
+ task:'Arma una página con <header> (con un h1 adentro), <main> (con un p adentro) y <footer>.',
+ starter:LT+'!-- Escribe tus tres secciones -->\n',
+ hint:'Cada sección se abre y se cierra, y el contenido va entre las dos etiquetas.',
+ solution:'<header>\n  <h1>Mis recetas</h1>\n</header>\n<main>\n  <p>Hoy cocino arepas.</p>\n</main>\n<footer>\n  <p>Gracias por visitar</p>\n</footer>\n',
+ test:(doc)=>{
+   if(!doc.querySelector('header h1')) return 'Dentro de <header> pon un <h1>.';
+   if(!doc.querySelector('main p')) return 'Dentro de <main> pon un <p>.';
+   if(!doc.querySelector('footer')) return 'Falta el <footer>.';
+   return true;
+ }},
+
+/* ---------------- CSS ---------------- */
+{id:'css-1',lang:'css',title:'Colores',sub:'Letra y fondo',
+ html:'<h1>Mi página</h1>\n<p>Estoy aprendiendo CSS paso a paso.</p>',
+ explain:'CSS le da estilo al HTML. Escribes el <strong>selector</strong> (a quién) y entre llaves las reglas, así: <code>propiedad: valor;</code>. <code>color</code> cambia la letra y <code>background</code> cambia el fondo.',
+ analogy:'Si el HTML es la casa, el CSS es la pintura y la decoración.',
+ example:'h1 {\n  color: rebeccapurple;\n}\n\np {\n  background: lightyellow;\n}\n',
+ task:'Cambia el color del h1 y ponle un color de fondo al párrafo.',
+ starter:'h1 {\n  \n}\n\np {\n  \n}\n',
+ hint:'Prueba con color: tomato; en el h1 y background: lightblue; en el p.',
+ solution:'h1 {\n  color: tomato;\n}\n\np {\n  background: lightblue;\n}\n',
+ test:(doc)=>{
+   const h=doc.querySelector('h1'),p=doc.querySelector('p');
+   if(getComputedStyle(h).color==='rgb(0, 0, 0)') return 'El h1 sigue negro. Prueba con color: tomato;';
+   if(getComputedStyle(p).backgroundColor==='rgba(0, 0, 0, 0)') return 'Al p le falta un color de fondo. Usa background: ...;';
+   return true;
+ }},
+{id:'css-2',lang:'css',title:'Letras y tamaños',sub:'Que el título se note',
+ html:'<h1>Mi página</h1>\n<p>Estoy aprendiendo CSS paso a paso.</p>',
+ explain:'<code>font-size</code> cambia el tamaño, <code>font-family</code> la tipografía y <code>text-align</code> la alineación. Los tamaños se miden en <code>px</code> (píxeles).',
+ analogy:'Es como escribir en tu cuaderno: letra grande para el título y más pequeña para el resto.',
+ example:'h1 {\n  font-size: 48px;\n  font-family: Georgia, serif;\n  text-align: center;\n}\n',
+ task:'Haz el h1 de 40px o más y centrado, y el párrafo de 18px o más.',
+ starter:'h1 {\n  \n}\n\np {\n  \n}\n',
+ hint:'Usa font-size: 44px; y text-align: center; en el h1. En el p, font-size: 20px;',
+ solution:'h1 {\n  font-size: 44px;\n  text-align: center;\n}\n\np {\n  font-size: 20px;\n}\n',
+ test:(doc)=>{
+   const h=getComputedStyle(doc.querySelector('h1')),p=getComputedStyle(doc.querySelector('p'));
+   if(parseFloat(h.fontSize)<40) return 'El h1 debe tener font-size de 40px o más.';
+   if(h.textAlign!=='center') return 'Centra el h1 con text-align: center;';
+   if(parseFloat(p.fontSize)<18) return 'El p debe tener font-size de 18px o más.';
+   return true;
+ }},
+{id:'css-3',lang:'css',title:'La caja y sus espacios',sub:'padding, borde y esquinas',
+ html:'<div class="tarjeta">\n  <h2>Mi tarjeta</h2>\n  <p>Aquí va el contenido.</p>\n</div>',
+ baseCss:'.tarjeta{background:#f3efff}',
+ explain:'En la web todo es una caja. <code>padding</code> es el espacio por dentro, <code>border</code> es el borde, <code>margin</code> es el espacio por fuera y <code>border-radius</code> redondea las esquinas.',
+ analogy:'Una caja de regalo: el papel de relleno es el padding, la caja es el borde y la distancia hasta la otra caja es el margin.',
+ example:'.tarjeta {\n  border: 2px solid rebeccapurple;\n  border-radius: 16px;\n  padding: 20px;\n  margin: 16px;\n}\n',
+ task:'Dale a .tarjeta un padding de 16px o más, un borde y esquinas redondeadas.',
+ starter:'.tarjeta {\n  \n}\n',
+ hint:'Necesitas tres reglas: padding, border y border-radius.',
+ solution:'.tarjeta {\n  padding: 20px;\n  border: 2px solid purple;\n  border-radius: 12px;\n}\n',
+ test:(doc)=>{
+   const c=getComputedStyle(doc.querySelector('.tarjeta'));
+   if(parseFloat(c.paddingTop)<16) return 'Falta un padding de 16px o más.';
+   if(!(parseFloat(c.borderTopWidth)>0)) return 'Agrega un borde, por ejemplo border: 2px solid purple;';
+   if(!(parseFloat(c.borderTopLeftRadius)>0)) return 'Redondea las esquinas con border-radius.';
+   return true;
+ }},
+{id:'css-4',lang:'css',title:'Flexbox',sub:'Poner cosas en fila',
+ html:'<div class="fila">\n  <div class="caja">1</div>\n  <div class="caja">2</div>\n  <div class="caja">3</div>\n</div>',
+ baseCss:'.caja{background:#7B5BE8;color:#fff;padding:16px;border-radius:8px;font-weight:700}',
+ explain:'Flexbox acomoda los hijos de una caja en fila o en columna. Lo activas con <code>display: flex</code> en el contenedor (el padre). <code>gap</code> deja espacio entre los hijos y <code>justify-content</code> los reparte.',
+ analogy:'Es como sentar personas en una banca: tú decides si quedan juntas, separadas o en el centro.',
+ example:'.fila {\n  display: flex;\n  gap: 12px;\n  justify-content: center;\n}\n',
+ task:'Pon las 3 cajas en una sola fila y deja espacio entre ellas con gap.',
+ starter:'.fila {\n  \n}\n',
+ hint:'En .fila escribe display: flex; y gap: 12px;',
+ solution:'.fila {\n  display: flex;\n  gap: 12px;\n}\n',
+ test:(doc)=>{
+   const cs=getComputedStyle(doc.querySelector('.fila'));
+   if(cs.display!=='flex') return 'Activa flexbox en .fila con display: flex;';
+   const b=[].slice.call(doc.querySelectorAll('.caja'));
+   if(!b.every(function(x){return x.offsetTop===b[0].offsetTop;})) return 'Las cajas todavía no están en una sola fila.';
+   if(!(parseFloat(cs.columnGap)>0)) return 'Agrega espacio entre las cajas con gap: 12px;';
+   return true;
+ }},
+{id:'css-5',lang:'css',title:'Efecto al pasar el mouse',sub:':hover y transition',
+ html:'<button class="boton">Tócame</button>',
+ baseCss:'.boton{background:#7B5BE8;color:#fff;border:0;padding:12px 20px;border-radius:10px;font-size:16px;cursor:pointer}',
+ explain:'Con <code>:hover</code> cambias el estilo cuando el mouse pasa por encima (en el celular, cuando tocas). <code>transition</code> hace que el cambio sea suave en vez de brusco.',
+ analogy:'Es como una luz con regulador: en vez de prenderse de golpe, sube poco a poco.',
+ example:'.boton {\n  transition: 0.3s;\n}\n\n.boton:hover {\n  background: #ff7b4a;\n  transform: scale(1.05);\n}\n',
+ task:'Haz que .boton cambie de color de fondo con :hover y agrega una transition.',
+ starter:'.boton {\n  \n}\n\n.boton:hover {\n  \n}\n',
+ hint:'En .boton:hover usa background: orange; y en .boton agrega transition: 0.3s;',
+ solution:'.boton {\n  transition: 0.3s;\n}\n\n.boton:hover {\n  background: orange;\n}\n',
+ test:(doc,logs,code)=>{
+   if(!/\.boton\s*:hover\s*\{[^}]*background/.test(code)) return 'Escribe una regla .boton:hover que cambie el background.';
+   if(!/transition/.test(code)) return 'Agrega transition: 0.3s; para que el cambio sea suave.';
+   return true;
+ }},
+
+/* ---------------- JavaScript ---------------- */
+{id:'js-1',lang:'js',title:'Mostrar mensajes',sub:'console.log',
+ explain:'<code>console.log()</code> muestra algo en la consola. Es la forma más fácil de ver qué hace tu programa. Si es texto, va entre comillas. Cada instrucción termina con punto y coma.',
+ analogy:'Es como hablar en voz alta mientras cocinas: te vas diciendo lo que haces para no perderte.',
+ example:'console.log("¡Hola, mundo!");\nconsole.log("Estoy aprendiendo JavaScript");\n',
+ task:'Muestra dos mensajes en la consola: tu nombre y una ciudad que te guste.',
+ starter:'// Escribe tus dos console.log aquí\n',
+ hint:'Cada mensaje va en su propio console.log("...");',
+ solution:'console.log("Me llamo Yuli");\nconsole.log("Me gusta Cartagena");\n',
+ test:(doc,logs)=>{
+   if(logs.length<2) return 'Muestra 2 mensajes con console.log. Ahora hay '+logs.length+'.';
+   return true;
+ }},
+{id:'js-2',lang:'js',title:'Variables',sub:'Cajas con etiqueta',
+ explain:'Una variable guarda un dato con un nombre. Usa <code>const</code> si el dato no va a cambiar y <code>let</code> si va a cambiar. Con <code>+</code> puedes pegar textos.',
+ analogy:'Es una caja con etiqueta: la etiqueta es el nombre (nombre) y adentro va el dato ("Yuli").',
+ example:'const nombre = "Yuli";\nlet puntos = 10;\npuntos = puntos + 5;\n\nconsole.log("Hola, " + nombre);\nconsole.log("Tienes " + puntos + " puntos");\n',
+ task:'Crea las variables nombre y lenguaje. Muestra un solo mensaje que use las dos, por ejemplo: Me llamo Yuli y aprendo JavaScript.',
+ starter:'// Crea las variables nombre y lenguaje\n// y muéstralas con console.log\n',
+ hint:'const nombre = "Yuli"; y const lenguaje = "JavaScript"; Luego: console.log("Me llamo " + nombre + " y aprendo " + lenguaje);',
+ solution:'const nombre = "Yuli";\nconst lenguaje = "JavaScript";\nconsole.log("Me llamo " + nombre + " y aprendo " + lenguaje);\n',
+ test:(doc,logs)=>{
+   if(typeof nombre==='undefined'||typeof lenguaje==='undefined') return 'Crea las dos variables: nombre y lenguaje.';
+   if(!logs.some(function(l){return l.indexOf(String(nombre))>-1&&l.indexOf(String(lenguaje))>-1;})) return 'Muestra un mensaje que use el valor de las dos variables.';
+   return true;
+ }},
+{id:'js-3',lang:'js',title:'Hacer cuentas',sub:'Sumar, restar, multiplicar',
+ explain:'JavaScript hace cuentas: <code>+</code> suma, <code>-</code> resta, <code>*</code> multiplica y <code>/</code> divide. El resultado lo puedes guardar en una variable.',
+ analogy:'Es una calculadora que además sabe escribir frases.',
+ example:'const precio = 4500;\nconst cantidad = 3;\nconst total = precio * cantidad;\n\nconsole.log("Pagas $" + total);\n',
+ task:'Calcula cuánto cuestan 4 cuadernos de $3200 cada uno y muestra el total.',
+ starter:'const precio = 3200;\nconst cantidad = 4;\n\n// Calcula el total y muéstralo con console.log\n',
+ hint:'Multiplica precio * cantidad y guarda el resultado en una variable.',
+ solution:'const precio = 3200;\nconst cantidad = 4;\nconst total = precio * cantidad;\n\nconsole.log("Total: $" + total);\n',
+ test:(doc,logs,code)=>{
+   if(!/\*/.test(code)) return 'Usa una multiplicación: precio * cantidad.';
+   if(!logs.some(function(l){return l.indexOf('12800')>-1;})) return 'El total correcto es precio por cantidad. Muéstralo con console.log.';
+   return true;
+ }},
+{id:'js-4',lang:'js',title:'Decisiones con if',sub:'Si pasa esto, haz aquello',
+ explain:'<code>if</code> decide qué hacer según una condición. Si es verdadera entra al primer bloque; si no, va al <code>else</code>. Para comparar usa <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code> y <code>===</code>.',
+ analogy:'Es un semáforo: si está en verde pasas; si no, esperas.',
+ example:'const nota = 4.2;\n\nif (nota >= 3) {\n  console.log("Aprobaste");\n} else {\n  console.log("A repasar");\n}\n',
+ task:'Escribe un if / else: si nota es 3 o más, muestra Aprobaste; si no, muestra A repasar.',
+ starter:'const nota = 2.5;\n\n// Escribe tu if / else aquí\n',
+ hint:'if (nota >= 3) { ... } else { ... }  Cada bloque lleva su console.log.',
+ solution:'const nota = 2.5;\n\nif (nota >= 3) {\n  console.log("Aprobaste");\n} else {\n  console.log("A repasar");\n}\n',
+ test:(doc,logs,code)=>{
+   if(typeof nota==='undefined') return 'No borres la variable nota.';
+   if(!/if\s*\(/.test(code)||!/else/.test(code)) return 'Usa la forma if (...) { ... } else { ... }';
+   const esperado=nota>=3?'Aprobaste':'A repasar';
+   if(logs.length!==1) return 'Debe mostrarse un solo mensaje.';
+   if(logs[0].trim()!==esperado) return 'Con nota '+nota+' debería mostrar "'+esperado+'".';
+   return true;
+ }},
+{id:'js-5',lang:'js',title:'Repetir con for',sub:'Ciclos',
+ explain:'Un ciclo repite una tarea. En <code>for (let i = 1; i &lt;= 5; i++)</code> pasa esto: empieza en 1, repite mientras <code>i</code> sea 5 o menos, y suma 1 en cada vuelta.',
+ analogy:'Es como dar vueltas a una pista: cuentas cada vuelta hasta llegar a la meta.',
+ example:'for (let i = 1; i <= 3; i++) {\n  console.log("Vuelta " + i);\n}\n',
+ task:'Muestra los números del 1 al 5, uno por línea.',
+ starter:'// Escribe tu for aquí\n',
+ hint:'for (let i = 1; i <= 5; i++) { console.log(i); }',
+ solution:'for (let i = 1; i <= 5; i++) {\n  console.log(i);\n}\n',
+ test:(doc,logs,code)=>{
+   if(!/for\s*\(/.test(code)) return 'Usa un ciclo for.';
+   if(logs.length!==5) return 'Deben salir exactamente 5 líneas. Ahora salen '+logs.length+'.';
+   for(var k=0;k<5;k++){ if(logs[k].indexOf(String(k+1))===-1) return 'La línea '+(k+1)+' debería mostrar el número '+(k+1)+'.'; }
+   return true;
+ }},
+{id:'js-6',lang:'js',title:'Funciones',sub:'Recetas que puedes repetir',
+ explain:'Una función es un bloque de código con nombre que puedes usar cuantas veces quieras. Recibe datos (parámetros) y devuelve un resultado con <code>return</code>.',
+ analogy:'Es una receta: le das los ingredientes, sigue los pasos y te devuelve el plato.',
+ example:'function saludar(nombre) {\n  return "Hola, " + nombre;\n}\n\nconsole.log(saludar("Yuli"));\nconsole.log(saludar("Ana"));\n',
+ task:'Crea una función doble(n) que devuelva el número multiplicado por 2. Luego muestra doble(21).',
+ starter:'// 1. Crea la función doble\n\n// 2. Muestra doble(21) con console.log\n',
+ hint:'function doble(n) { return n * 2; }',
+ solution:'function doble(n) {\n  return n * 2;\n}\n\nconsole.log(doble(21));\n',
+ test:(doc,logs)=>{
+   if(typeof doble!=='function') return 'Crea la función doble.';
+   if(doble(5)!==10) return 'doble(5) debería devolver 10.';
+   if(!logs.some(function(l){return l.trim()==='42';})) return 'Muestra doble(21) con console.log. Debe salir 42.';
+   return true;
+ }},
+{id:'js-7',lang:'js',title:'Reaccionar a un toque',sub:'Eventos y la página',
+ html:'<button id="boton">Tócame</button>\n<p id="mensaje">Aún no has tocado el botón.</p>',
+ explain:'Los eventos te dejan reaccionar a lo que hace la persona. Con <code>addEventListener</code> le dices a un botón qué hacer cuando lo toquen. <code>textContent</code> cambia el texto de un elemento.',
+ analogy:'Es un timbre: cuando alguien lo toca (el evento), suena la campana (tu código).',
+ example:'const boton = document.getElementById("boton");\nconst mensaje = document.getElementById("mensaje");\n\nboton.addEventListener("click", function () {\n  mensaje.textContent = "¡Me tocaste!";\n});\n',
+ task:'Haz que al tocar el botón cambie el texto del párrafo #mensaje.',
+ starter:'const boton = document.getElementById("boton");\nconst mensaje = document.getElementById("mensaje");\n\n// Escribe aquí el addEventListener\n',
+ hint:'boton.addEventListener("click", function () { mensaje.textContent = "..."; });',
+ solution:'const boton = document.getElementById("boton");\nconst mensaje = document.getElementById("mensaje");\n\nboton.addEventListener("click", function () {\n  mensaje.textContent = "¡Lo lograste!";\n});\n',
+ test:(doc)=>{
+   const b=doc.getElementById('boton'),m=doc.getElementById('mensaje');
+   const antes=m.textContent;
+   b.click();
+   if(m.textContent===antes) return 'Al tocar el botón el texto todavía no cambia.';
+   return true;
+ }}
+];
+
+/* ---------- Utilidades ---------- */
+var $=function(s,r){return (r||document).querySelector(s);};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var ICON={
+  star:'<svg viewBox="0 0 24 24" fill="#F5A524" aria-hidden="true"><path d="M12 2l3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.8 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z"/></svg>',
+  flame:'<svg viewBox="0 0 24 24" fill="#FF7B4A" aria-hidden="true"><path d="M12 2c1 4-3 5.5-3 9.5 0 1.6.8 2.7 2 3.2-.4-2 .6-3.2 1.8-4.2 1 1.6 3.2 2.6 3.2 5.3A5 5 0 0 1 7 16c-2-.9-3-3-3-5 0-5 5-6.5 8-9z" transform="translate(0 2)"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>'
+};
+
+/* ---------- Progreso guardado (solo en este navegador) ---------- */
+var KEY='yuli-aprende-v1';
+var S={xp:0,done:{},code:{},last:null,tab:'html',streak:{day:'',n:0}};
+try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&typeof p==='object'){for(var k in p){S[k]=p[k];}}}}catch(e){}
+var saveT=0;
+function save(){clearTimeout(saveT);saveT=setTimeout(function(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}},250);}
+function dayStr(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+(function(){
+  var now=new Date(),today=dayStr(now),y=new Date(now.getTime()-864e5);
+  if(S.streak.day===today) return;
+  S.streak.n=(S.streak.day===dayStr(y))?S.streak.n+1:1;
+  S.streak.day=today; save();
+})();
+function updateHeader(){
+  $('#xp').innerHTML=ICON.star+S.xp+' XP';
+  var n=S.streak.n||1;
+  $('#streak').innerHTML=ICON.flame+n+(n===1?' día':' días');
+}
+
+/* ---------- Resaltado de colores del código ---------- */
+var RULES={
+  html:{re:/(\x3C!--[\s\S]*?-->)|("[^"\n]*"|'[^'\n]*')|(<\/?[A-Za-z][\w-]*)|(\/?>)|([A-Za-z-]+)(?==)/g,cls:['com','str','tag','tag','attr']},
+  css:{re:/(\/\*[\s\S]*?\*\/)|("[^"\n]*"|'[^'\n]*')|(#[0-9a-fA-F]{3,8}\b)|(@[\w-]+)|([\w-]+(?=\s*:))|(\b\d+(?:\.\d+)?(?:px|em|rem|vh|vw|%|s|deg|fr)?)|([.#][A-Za-z_][\w-]*)/g,cls:['com','str','num','kw','prop','num','fn']},
+  js:{re:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`)|(\b(?:const|let|var|function|return|if|else|for|while|true|false|null|undefined|new|of|in|break|continue)\b)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_$][\w$]*)(?=\()/g,cls:['com','str','kw','num','fn']}
+};
+function hl(code,lang){
+  var R=RULES[lang],re=R.re,out='',last=0,m;
+  re.lastIndex=0;
+  while((m=re.exec(code))){
+    if(m[0]===''){re.lastIndex++;continue;}
+    var k=0;
+    for(var i=1;i<m.length;i++){if(m[i]!==undefined){k=i-1;break;}}
+    var c=R.cls[k];
+    if(lang==='css'&&c==='prop'&&!/[{;]\s*$/.test(code.slice(Math.max(0,m.index-300),m.index))) c='';
+    out+=esc(code.slice(last,m.index));
+    out+=c?'<span class="t-'+c+'">'+esc(m[0])+'</span>':esc(m[0]);
+    last=re.lastIndex;
+  }
+  return out+esc(code.slice(last));
+}
+
+/* ---------- Pantallas ---------- */
+var app=$('#app');
+var cur=null;          /* lección abierta */
+var runCounter=0;
+var el={};             /* elementos del taller */
+$('#brandLogo').src=LOGO;
+
+function lessonsOf(lang){return LESSONS.filter(function(x){return x.lang===lang;});}
+
+function renderHome(){
+  cur=null;
+  var tab=S.tab||'html';
+  var courses=['html','css','js'].map(function(l){
+    var all=lessonsOf(l),n=all.filter(function(x){return S.done[x.id];}).length;
+    return '<button class="course" role="tab" type="button" data-tab="'+l+'" aria-selected="'+(tab===l)+'">'+
+      '<span class="badge '+l+'">'+LANG[l].name.toUpperCase()+'</span>'+
+      '<h3>'+LANG[l].name+'</h3><p>'+LANG[l].tag+'</p>'+
+      '<div class="prog" style="--c:var(--c-'+l+')"><i style="width:'+Math.round(n/all.length*100)+'%"></i></div>'+
+      '<span class="prog-txt">'+n+' de '+all.length+' retos</span></button>';
+  }).join('')+
+  '<div class="course" aria-disabled="true"><span class="badge">PYTHON</span><h3>Python</h3><p>Próximamente</p></div>';
+  var list=lessonsOf(tab).map(function(x,i){
+    var d=!!S.done[x.id];
+    return '<li><a class="lrow" href="#'+x.id+'"><span class="num'+(d?' done':'')+'">'+(d?ICON.check:(i+1))+'</span>'+
+      '<span class="ltxt"><strong>'+x.title+'</strong><small>'+x.sub+'</small></span>'+
+      '<span class="xp'+(d?' ok':'')+'">'+(d?'Hecho':XP_PER+' XP')+'</span></a></li>';
+  }).join('');
+  var next=LESSONS.find(function(x){return x.id===S.last;});
+  var cta=next?{href:next.id,txt:'Continuar: '+next.title}:{href:LESSONS[0].id,txt:'Empezar con HTML'};
+  app.innerHTML=
+    '<section class="hero">'+
+      '<img class="hero-logo" src="'+LOGO+'" alt="Logo de Aprende programación con Yuli: Yuli sonriendo frente a su laptop, con libros de Python, HTML, JavaScript y CSS">'+
+      '<div class="hero-copy"><h1>Escribe código de verdad desde la primera lección</h1>'+
+      '<p>Cada lección tiene un ejemplo para probar y un reto para resolver. El código va arriba y lo que haces aparece abajo.</p>'+
+      '<a class="btn primary lg" href="#'+cta.href+'">'+cta.txt+'</a></div>'+
+    '</section>'+
+    '<div class="courses" role="tablist" aria-label="Cursos">'+courses+'</div>'+
+    '<section class="path"><h2>Lecciones de '+LANG[tab].name+'</h2><p class="muted">'+LANG[tab].tag+'</p><ol class="lessons">'+list+'</ol></section>';
+}
+
+function openLesson(L){
+  cur={lesson:L,step:'ex',runId:0,check:false,err:null};
+  S.last=L.id;save();
+  var hasFrame=(L.lang!=='js')||!!L.html;
+  var cls='out'+(hasFrame?'':' no-frame')+(L.lang==='js'?'':' no-con');
+  app.innerHTML=
+    '<div class="lesson">'+
+      '<section class="guide" id="guide"></section>'+
+      '<section class="bench" aria-label="Taller de código">'+
+        '<div class="pane editor">'+
+          '<div class="bar"><span class="file">'+LANG[L.lang].file+'</span><span class="live">'+(L.lang==='js'?'':'Se actualiza mientras escribes')+'</span><span class="sp"></span>'+
+          '<button class="btn ghost sm" id="reset" type="button">Reiniciar</button>'+
+          '<button class="btn primary sm" id="run" type="button">'+ICON.play+' Ejecutar</button></div>'+
+          '<div class="ed"><div class="gut" id="gut" aria-hidden="true"></div>'+
+          '<div class="code"><pre class="hl" id="hl" aria-hidden="true"></pre>'+
+          '<textarea class="ta" id="ta" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Editor de código '+LANG[L.lang].name+'. Pulsa Escape y luego Tab para salir del editor."></textarea></div></div>'+
+        '</div>'+
+        '<div class="pane result">'+
+          '<div class="bar"><span class="file">Resultado</span><span class="sp"></span><span class="status" id="status" role="status"></span></div>'+
+          '<div class="'+cls+'" id="out"><iframe id="frame" title="Vista previa del resultado" sandbox="allow-scripts"></iframe><div class="con" id="con"></div></div>'+
+        '</div>'+
+      '</section>'+
+    '</div>';
+  el={guide:$('#guide'),ta:$('#ta'),hl:$('#hl'),gut:$('#gut'),frame:$('#frame'),con:$('#con'),status:$('#status'),lines:0,timer:0};
+  bindEditor();
+  renderGuide();
+  loadStep();
+  window.scrollTo(0,0);
+}
+
+function renderGuide(){
+  var L=cur.lesson,all=lessonsOf(L.lang),idx=all.indexOf(L),done=!!S.done[L.id];
+  var prev=all[idx-1],next=all[idx+1];
+  var body;
+  if(cur.step==='ex'){
+    body='<p>'+L.explain+'</p><div class="analogy"><b>Piénsalo así</b><p>'+L.analogy+'</p></div>'+
+      '<p>Cambia el código de arriba y mira qué pasa abajo. Cuando estés lista, pasa al reto.</p>'+
+      '<button class="btn primary" type="button" data-go="ch">Ir al reto</button>';
+  }else{
+    body='<p class="task">'+esc(L.task)+'</p>'+
+      '<div class="actions"><button class="btn primary" id="check" type="button">Comprobar</button>'+
+      '<button class="btn" id="hintBtn" type="button">Pista</button>'+
+      '<button class="btn ghost" id="solBtn" type="button">Ver solución</button></div>'+
+      '<div id="fb" aria-live="polite"></div><div id="extra"></div>';
+  }
+  el.guide.innerHTML=
+    '<a class="back" href="#">← Lecciones</a>'+
+    '<div class="meta"><span class="badge '+L.lang+'">'+LANG[L.lang].name.toUpperCase()+'</span><span>Lección '+(idx+1)+' de '+all.length+'</span>'+(done?'<span class="chip-ok">Completada</span>':'')+'</div>'+
+    '<h1 class="ltitle">'+L.title+'</h1>'+
+    '<div class="seg" role="tablist"><button role="tab" type="button" data-go="ex" aria-selected="'+(cur.step==='ex')+'">1 · Ejemplo</button><button role="tab" type="button" data-go="ch" aria-selected="'+(cur.step==='ch')+'">2 · Reto</button></div>'+
+    body+
+    '<nav class="pn" aria-label="Lecciones">'+
+      (prev?'<a class="btn" href="#'+prev.id+'">← Anterior</a>':'<span></span>')+
+      (next?'<a class="btn" href="#'+next.id+'">Siguiente →</a>':'<a class="btn" href="#">Ver todas</a>')+
+    '</nav>';
+}
+
+/* ---------- Editor ---------- */
+function paint(){
+  el.hl.innerHTML=hl(el.ta.value,cur.lesson.lang)+'\n';
+  var n=el.ta.value.split('\n').length;
+  if(n!==el.lines){
+    el.lines=n;var s='';for(var i=1;i<=n;i++){s+=i+(i<n?'\n':'');}
+    el.gut.textContent=s;
+  }
+  el.hl.scrollTop=el.ta.scrollTop;el.hl.scrollLeft=el.ta.scrollLeft;el.gut.scrollTop=el.ta.scrollTop;
+}
+function insertText(ta,text){
+  ta.focus();
+  var ok=false;
+  try{ok=document.execCommand('insertText',false,text);}catch(e){}
+  if(!ok){
+    var s=ta.selectionStart,e=ta.selectionEnd;
+    ta.setRangeText(text,s,e,'end');
+    ta.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+}
+function bindEditor(){
+  var ta=el.ta;
+  ta.addEventListener('scroll',function(){el.hl.scrollTop=ta.scrollTop;el.hl.scrollLeft=ta.scrollLeft;el.gut.scrollTop=ta.scrollTop;});
+  ta.addEventListener('input',function(){
+    paint();
+    S.code[cur.lesson.id+':'+cur.step]=ta.value;save();
+    if(cur.lesson.lang!=='js'){clearTimeout(el.timer);el.timer=setTimeout(function(){run(false);},500);}
+  });
+  ta.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){ta.dataset.free='1';return;}
+    if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();clearTimeout(el.timer);run(false);return;}
+    if(e.key==='Tab'&&!e.shiftKey&&!ta.dataset.free){e.preventDefault();insertText(ta,'  ');return;}
+    if(e.key==='Enter'&&!e.shiftKey&&!e.ctrlKey&&!e.metaKey){
+      var v=ta.value,s=ta.selectionStart,ls=v.lastIndexOf('\n',s-1)+1;
+      var indent=(v.slice(ls,s).match(/^[ \t]*/)||[''])[0];
+      var before=v.slice(0,s).replace(/[ \t]+$/,'');
+      if(/[{(\[]$/.test(before)) indent+='  ';
+      e.preventDefault();insertText(ta,'\n'+indent);return;
+    }
+    if(e.key!=='Shift'&&e.key!=='Tab') delete ta.dataset.free;
+  });
+  $('#run').addEventListener('click',function(){clearTimeout(el.timer);run(false);});
+  $('#reset').addEventListener('click',function(){
+    var key=cur.lesson.id+':'+cur.step;delete S.code[key];save();
+    ta.value=cur.step==='ex'?cur.lesson.example:cur.lesson.starter;
+    paint();run(false);
+  });
+}
+function loadStep(){
+  var L=cur.lesson,key=L.id+':'+cur.step;
+  el.ta.value=(typeof S.code[key]==='string')?S.code[key]:(cur.step==='ex'?L.example:L.starter);
+  el.ta.scrollTop=0;el.ta.scrollLeft=0;
+  paint();run(false);
+}
+
+/* ---------- Ejecutar el código en la vista previa ---------- */
+function hook(id){
+  return LT+'script>(function(){var ID='+id+';function send(m){m.yuli=1;m.id=ID;parent.postMessage(m,"*");}'+
+  'function fmt(a){try{return typeof a==="string"?a:(typeof a==="object"&&a!==null?JSON.stringify(a):String(a));}catch(e){return String(a);}}'+
+  'window.__logs=[];["log","info","warn","error"].forEach(function(k){console[k]=function(){var s=[].map.call(arguments,fmt).join(" ");window.__logs.push(s);send({type:"log",kind:k,text:s});};});'+
+  'window.addEventListener("error",function(e){send({type:"error",text:String(e.message||"Error")});});'+
+  'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(a)e.preventDefault();});'+
+  '})();'+LT+'/script>';
+}
+function buildDoc(L,code,id){
+  var base='<style>html{color-scheme:light}body{margin:0;padding:14px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;background:#fff}</style>';
+  var head='',body='',after='';
+  if(L.lang==='html'){body=code;}
+  else if(L.lang==='css'){head='<style>'+(L.baseCss||'')+'\n'+code+'</style>';body=L.html;}
+  else{body=L.html||'';after=LT+'script>'+code+'\n'+LT+'/script>';}
+  var test=LT+'script>addEventListener("load",function(){setTimeout(function(){var r=null,err=null;try{r=('+L.test.toString()+')(document,window.__logs,'+JSON.stringify(code).replace(/</g,'\\u003c')+');}catch(e){err=String(e&&e.message||e);}parent.postMessage({yuli:1,id:'+id+',type:"result",r:(r===undefined?null:r),err:err},"*");},60);});'+LT+'/script>';
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8">'+base+hook(id)+head+'</head><body>'+body+after+test+'</body></html>';
+}
+function setStatus(k){
+  var s=el.status;
+  s.className='status'+(k==='ok'?' ok':k==='err'?' err':'');
+  s.textContent=k==='run'?'Ejecutando…':k==='ok'?'Listo':k==='err'?'Hay un error':'';
+}
+function addLog(text,kind){
+  var empty=el.con.querySelector('.empty');if(empty) empty.remove();
+  var d=document.createElement('div');d.className='ln '+(kind||'log');d.textContent=text;
+  el.con.appendChild(d);el.con.scrollTop=el.con.scrollHeight;
+}
+function run(check){
+  if(!cur) return;
+  var L=cur.lesson,id=++runCounter;
+  cur.runId=id;cur.check=!!check;cur.err=null;
+  el.con.innerHTML='<div class="ln empty">Aquí aparece lo que muestre console.log</div>';
+  setStatus('run');
+  el.frame.srcdoc=buildDoc(L,el.ta.value,id);
+}
+window.addEventListener('message',function(e){
+  if(!cur||!el.frame||e.source!==el.frame.contentWindow) return;
+  var m=e.data;
+  if(!m||!m.yuli||m.id!==cur.runId) return;
+  if(m.type==='log'){addLog(m.text,m.kind);}
+  else if(m.type==='error'){cur.err=m.text;addLog(m.text,'error');setStatus('err');}
+  else if(m.type==='result'){
+    if(!cur.err) setStatus('ok');
+    if(cur.check){cur.check=false;finishCheck(m);}
+  }
+});
+
+/* ---------- Comprobar el reto ---------- */
+function showFb(kind,html){var f=$('#fb');if(f) f.innerHTML='<div class="fb '+kind+'">'+html+'</div>';}
+function finishCheck(m){
+  if(cur.err) return showFb('bad','Tu código tiene un error: <code>'+esc(cur.err)+'</code>. Corrígelo y vuelve a comprobar.');
+  if(m.err) return showFb('bad','No pude comprobar tu código: '+esc(m.err));
+  if(m.r===true) return success();
+  showFb('bad',esc(typeof m.r==='string'?m.r:'Todavía no. Vuelve a leer el reto e inténtalo otra vez.'));
+}
+function success(){
+  var L=cur.lesson,first=!S.done[L.id];
+  if(first){S.done[L.id]=true;S.xp+=XP_PER;save();updateHeader();}
+  var all=lessonsOf(L.lang),next=all[all.indexOf(L)+1];
+  showFb('ok','¡Reto superado!'+(first?' Ganaste '+XP_PER+' XP.':'')+' '+
+    (next?'<a href="#'+next.id+'">Ir a la siguiente lección →</a>':'<a href="#">Ver todas las lecciones →</a>'));
+  var chip=el.guide.querySelector('.meta');
+  if(chip&&!chip.querySelector('.chip-ok')){var c=document.createElement('span');c.className='chip-ok';c.textContent='Completada';chip.appendChild(c);}
+}
+
+/* ---------- Clics generales ---------- */
+app.addEventListener('click',function(e){
+  var t=e.target.closest('[data-tab]');
+  if(t){S.tab=t.getAttribute('data-tab');save();renderHome();return;}
+  var g=e.target.closest('[data-go]');
+  if(g&&cur){
+    var step=g.getAttribute('data-go');
+    if(step!==cur.step){cur.step=step;renderGuide();loadStep();}
+    return;
+  }
+  if(!cur) return;
+  if(e.target.closest('#check')){
+    clearTimeout(el.timer);showFb('wait','Comprobando…');run(true);return;
+  }
+  if(e.target.closest('#hintBtn')){
+    $('#extra').innerHTML='<div class="note"><strong>Pista:</strong> '+esc(cur.lesson.hint)+'</div>';return;
+  }
+  if(e.target.closest('#solBtn')){
+    $('#extra').innerHTML='<pre class="sol">'+esc(cur.lesson.solution)+'</pre><button class="btn sm" id="useSol" type="button">Usar en el editor</button>';return;
+  }
+  if(e.target.closest('#useSol')){
+    el.ta.value=cur.lesson.solution;S.code[cur.lesson.id+':ch']=el.ta.value;save();paint();run(false);return;
+  }
+});
+
+/* ---------- Rutas por hash: #html-1, #css-3 ... ---------- */
+function route(){
+  var id=location.hash.slice(1);
+  var L=LESSONS.find(function(x){return x.id===id;});
+  if(L) openLesson(L); else renderHome();
+}
+window.addEventListener('hashchange',route);
+updateHeader();
+route();
+})();
+</script>
+<script>
+/* Actualización automática: si hay una versión nueva, la app se recarga sola. */
+if('serviceWorker' in navigator){
+  var teniaControl=!!navigator.serviceWorker.controller,recargada=false;
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(!teniaControl||recargada) return;
+    recargada=true;location.reload();
+  });
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      document.addEventListener('visibilitychange',function(){if(!document.hidden) reg.update();});
+      setInterval(function(){reg.update();},30*60*1000);
+    }).catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
