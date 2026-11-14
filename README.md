@@ -1,48 +1,76 @@
 # Aprende programación con Yuli
 
 App web instalable para aprender HTML, CSS y JavaScript con lecciones, ejemplos y retos.
-El código va arriba y el resultado aparece abajo. Funciona sin internet y se actualiza sola.
+El código va arriba y el resultado aparece abajo.
 
-## Publicarla en GitHub (sin usar la terminal)
+- Se instala en el celular y en el computador.
+- Abre sin internet y se actualiza sola.
+- Tiene certificados con tu nombre de registro (imagen y PDF).
+- Puede guardar tu progreso en tu Google Drive.
 
-1. Entra a [github.com](https://github.com) con tu cuenta.
-2. Arriba a la derecha toca **+** y luego **New repository**.
-3. Nombre: `aprende-programacion-con-yuli`. Márcalo como **Public** y toca **Create repository**.
-4. En la página del repositorio toca el enlace **uploading an existing file**.
-5. Arrastra **el contenido** de esta carpeta (`index.html`, `sw.js`, `manifest.webmanifest`, `logo.webp` y la carpeta `icons`), no la carpeta que los contiene. Abajo toca **Commit changes**.
-6. Ve a **Settings → Pages**. En **Source** elige **Deploy from a branch**. En **Branch** elige `main` y la carpeta `/ (root)`. Toca **Save**.
-7. Espera uno o dos minutos y recarga esa página. Arriba aparece tu dirección:
-   `https://TU-USUARIO.github.io/aprende-programacion-con-yuli/`
+---
 
-## Instalarla
+## 1. Subir esta versión a GitHub
 
-- **Android (Chrome):** abre la dirección, toca ⋮ y elige **Instalar app**.
-- **iPhone (Safari):** abre la dirección, toca Compartir y **Agregar a pantalla de inicio**.
-- **Computador (Chrome o Edge):** ícono de instalar en la barra de direcciones.
+Descomprime el zip. En tu repositorio toca **Add file → Upload files** (Agregar archivo → Cargar archivos) y arrastra **lo que hay dentro de la carpeta**, no la carpeta completa:
 
-## Actualizarla
+`index.html`, `sw.js`, `config.js`, `manifest.webmanifest`, `logo.webp`, `README.md` y la carpeta `icons`.
 
-Cada vez que haya una versión nueva:
+Toca **Confirmar cambios**. Los archivos con el mismo nombre se reemplazan. En 2 o 3 minutos queda publicada.
 
-1. En tu repositorio toca **Add file → Upload files**.
-2. Arrastra los archivos nuevos (por ejemplo `index.html`). Reemplazan a los anteriores.
-3. Toca **Commit changes**.
+Tu dirección es:
+`https://yulipaotdj-sys.github.io/aprende-programacion-con-yuli/`
 
-En uno o dos minutos queda publicada. Nadie tiene que descargar nada: la próxima vez que abran la app con internet, se actualiza sola.
+## 2. Instalarla en el celular
 
-## Con la terminal (opcional)
+- En la pantalla de inicio de la app hay un cuadro **"Instala la app en tu celular"** con tu logo. Si tu navegador lo permite, toca **Instalar app**.
+- Si no aparece el botón: en Android (Chrome) toca los tres puntos ⋮ y elige **Instalar app**. En iPhone (Safari) toca Compartir y **Agregar a pantalla de inicio**.
 
-```
-git init
-git add .
-git commit -m "Primera versión"
-git branch -M main
-git remote add origin https://github.com/TU-USUARIO/aprende-programacion-con-yuli.git
-git push -u origin main
-```
+Cuando haya una versión nueva, no tienes que descargar nada: la app se actualiza sola al abrirla con internet.
 
-Para cada versión nueva: `git add .`, `git commit -m "Nueva lección"` y `git push`.
+## 3. Nombre de registro y certificados
+
+1. En la pantalla de inicio, baja a **Mi cuenta**.
+2. Escribe tu nombre completo en **Mi nombre de registro** y toca **Guardar**.
+3. Cuando termines todos los retos de un curso, en **Mis certificados** aparece **Ver certificado**.
+4. Ahí puedes descargarlo como **imagen** o como **PDF**.
+
+Hay un certificado por cada curso (HTML, CSS y JavaScript) y uno general cuando terminas los 17 retos.
+Es un certificado de finalización de la app y no una titulación oficial.
+
+## 4. Guardar el progreso en Google Drive (se hace una sola vez)
+
+El progreso se guarda en una carpeta privada que la app tiene dentro de tu Drive. Pesa unos pocos kilobytes, no usa Firebase y no aparece en "Mi unidad".
+
+Para que funcione necesitas crear un **ID de cliente** de Google. Es gratis.
+
+1. Entra a [console.cloud.google.com](https://console.cloud.google.com) con tu cuenta de Google.
+2. Arriba toca el selector de proyectos, luego **Proyecto nuevo**. Ponle de nombre `Aprende con Yuli` y toca **Crear**.
+3. Abre el menú **☰ → APIs y servicios → Biblioteca**. Busca **Google Drive API** y toca **Habilitar**.
+4. Ve a **APIs y servicios → Pantalla de consentimiento de OAuth** (o **Google Auth Platform**) y toca **Comenzar**.
+   - Nombre de la app: `Aprende programación con Yuli`.
+   - Correo de asistencia: tu correo.
+   - Público: **Externo**.
+5. En **Acceso a los datos** (Data access) toca **Agregar o quitar permisos**. Busca `drive.appdata` ("Ver y administrar sus propios datos de configuración de aplicación en Google Drive"), márcalo y guarda.
+6. En **Público** (Audience) agrega tu correo en **Usuarios de prueba**. Si quieres que cualquier persona pueda usar el guardado en Drive, toca **Publicar la aplicación**.
+7. Ve a **Clientes** (o **Credenciales**) y toca **Crear cliente** (Crear credenciales → **ID de cliente de OAuth**).
+   - Tipo de aplicación: **Aplicación web**.
+   - En **Orígenes autorizados de JavaScript** agrega exactamente: `https://yulipaotdj-sys.github.io`
+     (solo eso, sin `/aprende-programacion-con-yuli`).
+   - Toca **Crear** y copia el **ID de cliente**. Termina en `.apps.googleusercontent.com`.
+8. En GitHub abre el archivo `config.js`, toca el lápiz y pega el ID entre las comillas:
+   `googleClientId: 'AQUI-VA-TU-ID.apps.googleusercontent.com'`
+   Toca **Confirmar cambios**.
+9. Abre la app, baja a **Mi cuenta** y toca **Conectar con Google Drive**.
+
+Los nombres de los menús de Google pueden cambiar un poco. Si algo no se ve igual, busca la opción con un nombre parecido.
+
+**Cómo funciona después:**
+- Cada vez que superas un reto, el progreso se guarda en Drive.
+- Si cambias de celular, abre la app, toca **Conectar con Google Drive** y recuperas tu avance y tu nombre.
+- Cada hora Google pide confirmar de nuevo. Si ves "Hay cambios sin guardar en Drive", toca **Sincronizar ahora**.
+- El archivo `config.js` no cambia cuando actualizas la app, así que tu ID se queda guardado.
 
 ## Nota
 
-El avance y los puntos se guardan en cada dispositivo. Si cambias de celular o de navegador, empiezas de cero.
+Sin conectar Drive, el avance se guarda solo en ese dispositivo y navegador.

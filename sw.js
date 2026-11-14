@@ -4,13 +4,15 @@
 const CACHE = 'yuli-app-v1';
 const FONTS = 'yuli-fonts-v1';
 const CORE = [
-  './', 'index.html', 'manifest.webmanifest', 'logo.webp',
+  './', 'index.html', 'config.js', 'manifest.webmanifest', 'logo.webp',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      .then((c) => Promise.all(CORE.map((u) => c.add(u).catch(() => {}))))
+      .then(() => self.skipWaiting())
   );
 });
 

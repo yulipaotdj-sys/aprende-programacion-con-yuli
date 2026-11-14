@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#12152B" media="(prefers-color-scheme: dark)">
 <meta name="description" content="Aprende HTML, CSS y JavaScript con lecciones, ejemplos y retos. El código va arriba y el resultado abajo.">
 <link rel="manifest" href="manifest.webmanifest">
+<script src="config.js"></script>
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -187,6 +188,35 @@ code{font-family:var(--font-code);font-size:.9em;background:var(--surface-2);pad
   .pane.editor,.pane.result{height:auto;flex:1 1 0}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Instalación, cuenta, certificados */
+.install{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-block:8px 6px}
+.install img{width:56px;height:56px;border-radius:50%;flex:none}
+.install div{flex:1 1 220px;min-width:0}
+.install p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.acct{padding-block:8px 48px}
+.acct h2{font:600 24px/1.2 var(--font-display);margin:0 0 12px}
+.acct h3{font:600 18px/1.2 var(--font-display);margin:0 0 6px}
+.acct>h3{margin:4px 0 10px}
+.cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));margin-bottom:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;min-width:0}
+.card p{margin:0 0 12px;color:var(--muted);font-size:15px}
+.card .actions{margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.in{flex:1 1 200px;min-width:0;font:600 16px var(--font-body);padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.certs{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.cert{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:64px}
+.cert+.cert{border-top:1px solid var(--line)}
+.cert-t{flex:1;min-width:0;display:flex;flex-direction:column}
+.cert-t small{color:var(--muted);font-size:14px}
+dialog{border:0;border-radius:16px;padding:0;background:var(--surface);color:var(--fg);width:min(920px,94vw);max-height:94vh}
+dialog::backdrop{background:rgba(10,12,40,.6)}
+.dlg-in{padding:16px;display:flex;flex-direction:column;gap:12px}
+.dlg-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dlg-top h2{font:600 20px/1.2 var(--font-display);margin:0}
+#certCanvas{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:50;background:var(--fg);color:var(--bg);font-weight:700;font-size:15px;padding:10px 16px;border-radius:12px;max-width:min(92vw,420px);text-align:center}
 </style>
 
 
@@ -205,6 +235,15 @@ code{font-family:var(--font-code);font-size:.9em;background:var(--surface-2);pad
   </div>
 </header>
 <main id="app" class="inner"></main>
+
+<dialog id="certDlg" aria-labelledby="certTitle">
+  <div class="dlg-in">
+    <div class="dlg-top"><h2 id="certTitle">Tu certificado</h2><button class="btn ghost sm" type="button" id="certClose">Cerrar</button></div>
+    <canvas id="certCanvas" aria-label="Vista previa del certificado"></canvas>
+    <div class="actions"><button class="btn primary" id="certPng" type="button">Descargar imagen</button><button class="btn" id="certPdf" type="button">Descargar PDF</button></div>
+  </div>
+</dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
 (function(){
@@ -493,7 +532,7 @@ var ICON={
 
 /* ---------- Progreso guardado (solo en este navegador) ---------- */
 var KEY='yuli-aprende-v1';
-var S={xp:0,done:{},code:{},last:null,tab:'html',streak:{day:'',n:0}};
+var S={xp:0,done:{},code:{},last:null,tab:'html',streak:{day:'',n:0},name:'',doneAt:{},drive:{on:false,last:''}};
 try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&typeof p==='object'){for(var k in p){S[k]=p[k];}}}}catch(e){}
 var saveT=0;
 function save(){clearTimeout(saveT);saveT=setTimeout(function(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}},250);}
@@ -568,8 +607,8 @@ function renderHome(){
       '<p>Cada lección tiene un ejemplo para probar y un reto para resolver. El código va arriba y lo que haces aparece abajo.</p>'+
       '<a class="btn primary lg" href="#'+cta.href+'">'+cta.txt+'</a></div>'+
     '</section>'+
-    '<div class="courses" role="tablist" aria-label="Cursos">'+courses+'</div>'+
-    '<section class="path"><h2>Lecciones de '+LANG[tab].name+'</h2><p class="muted">'+LANG[tab].tag+'</p><ol class="lessons">'+list+'</ol></section>';
+    installBanner()+'<div class="courses" role="tablist" aria-label="Cursos">'+courses+'</div>'+
+    '<section class="path"><h2>Lecciones de '+LANG[tab].name+'</h2><p class="muted">'+LANG[tab].tag+'</p><ol class="lessons">'+list+'</ol></section>'+accountSection();
 }
 
 function openLesson(L){
@@ -742,9 +781,11 @@ function finishCheck(m){
 }
 function success(){
   var L=cur.lesson,first=!S.done[L.id];
-  if(first){S.done[L.id]=true;S.xp+=XP_PER;save();updateHeader();}
+  if(first){S.done[L.id]=true;S.xp+=XP_PER;S.doneAt=S.doneAt||{};S.doneAt[L.id]=new Date().toISOString();save();updateHeader();}
+  driveSoon(true);
   var all=lessonsOf(L.lang),next=all[all.indexOf(L)+1];
   showFb('ok','¡Reto superado!'+(first?' Ganaste '+XP_PER+' XP.':'')+' '+
+    (certDone(L.lang)?'<strong>¡Terminaste el curso de '+LANG[L.lang].name+'!</strong> Pide tu certificado <a href="#">en el inicio</a>. ':'')+
     (next?'<a href="#'+next.id+'">Ir a la siguiente lección →</a>':'<a href="#">Ver todas las lecciones →</a>'));
   var chip=el.guide.querySelector('.meta');
   if(chip&&!chip.querySelector('.chip-ok')){var c=document.createElement('span');c.className='chip-ok';c.textContent='Completada';chip.appendChild(c);}
@@ -752,6 +793,7 @@ function success(){
 
 /* ---------- Clics generales ---------- */
 app.addEventListener('click',function(e){
+  if(handleAct(e)) return;
   var t=e.target.closest('[data-tab]');
   if(t){S.tab=t.getAttribute('data-tab');save();renderHome();return;}
   var g=e.target.closest('[data-go]');
@@ -774,6 +816,319 @@ app.addEventListener('click',function(e){
     el.ta.value=cur.lesson.solution;S.code[cur.lesson.id+':ch']=el.ta.value;save();paint();run(false);return;
   }
 });
+
+/* ---------- Nombre, certificados, Drive e instalación ---------- */
+var CFG=window.YULI_CONFIG||{};
+var CID=String(CFG.googleClientId||'').trim();
+var SCOPE='https://www.googleapis.com/auth/drive.appdata';
+var CERTS={
+  html:{title:'HTML: el esqueleto de la página'},
+  css:{title:'CSS: la pintura y la decoración'},
+  js:{title:'JavaScript: el cerebro de la página'},
+  all:{title:'Programación web básica: HTML, CSS y JavaScript'}
+};
+var certCur='html';
+function certLessons(k){return k==='all'?LESSONS:lessonsOf(k);}
+function certCount(k){return certLessons(k).filter(function(x){return S.done[x.id];}).length;}
+function certDone(k){return certCount(k)===certLessons(k).length;}
+function certDate(k){
+  var best='';
+  certLessons(k).forEach(function(x){var d=(S.doneAt||{})[x.id];if(d&&d>best)best=d;});
+  return best?new Date(best):new Date();
+}
+var toastT=0;
+function toast(msg){
+  var t=$('#toast');if(!t) return;
+  t.textContent=msg;t.hidden=false;clearTimeout(toastT);
+  toastT=setTimeout(function(){t.hidden=true;},3500);
+}
+function ago(iso){
+  if(!iso) return '';
+  var s=Math.round((Date.now()-new Date(iso).getTime())/1000);
+  if(s<60) return 'hace un momento';
+  var m=Math.round(s/60);if(m<60) return 'hace '+m+(m===1?' minuto':' minutos');
+  var h=Math.round(m/60);if(h<24) return 'hace '+h+(h===1?' hora':' horas');
+  var d=Math.round(h/24);return 'hace '+d+(d===1?' día':' días');
+}
+function attr(s){return esc(s).replace(/"/g,'&quot;');}
+
+/* ---- Instalar la app ---- */
+var deferredInstall=null;
+function isStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}
+function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}
+function installBanner(){
+  if(isStandalone()) return '';
+  var txt,btn='';
+  if(deferredInstall){
+    txt='Tenla en la pantalla de inicio de tu celular. Abre como una app y se actualiza sola.';
+    btn='<button class="btn primary" type="button" data-act="install">Instalar app</button>';
+  }else if(isIOS()){
+    txt='En iPhone: toca el botón Compartir y elige "Agregar a pantalla de inicio".';
+  }else{
+    txt='Abre el menú del navegador (los tres puntos) y elige "Instalar app".';
+  }
+  return '<section class="install"><img src="'+LOGO+'" alt="" width="56" height="56"><div><strong>Instala la app en tu celular</strong><p>'+txt+'</p></div>'+btn+'</section>';
+}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredInstall=e;if(!cur) renderHome();});
+window.addEventListener('appinstalled',function(){deferredInstall=null;if(!cur) renderHome();});
+try{if(navigator.storage&&navigator.storage.persist) navigator.storage.persist();}catch(e){}
+
+/* ---- Certificados ---- */
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function loadImg(src){return new Promise(function(res){var i=new Image();i.onload=function(){res(i);};i.onerror=function(){res(null);};i.src=src;});}
+async function drawCert(cv,k,name){
+  try{await Promise.race([Promise.all([document.fonts.load('600 80px Fredoka'),document.fonts.load('700 30px Nunito')]),new Promise(function(r){setTimeout(r,1500);})]);}catch(e){}
+  var W=1600,H=1131,ctx=cv.getContext('2d');
+  cv.width=W;cv.height=H;
+  var logo=await loadImg(LOGO);
+  var D='Fredoka, system-ui, sans-serif',B='Nunito, system-ui, sans-serif';
+  ctx.fillStyle='#7B5BE8';ctx.fillRect(0,0,W,H);
+  rr(ctx,34,34,W-68,H-68,30);ctx.fillStyle='#FFFFFF';ctx.fill();
+  rr(ctx,64,64,W-128,H-128,18);ctx.lineWidth=3;ctx.strokeStyle='#DDD8EE';ctx.stroke();
+  ctx.textAlign='center';ctx.textBaseline='alphabetic';
+  if(logo) ctx.drawImage(logo,W/2-85,96,170,170);
+  ctx.fillStyle='#1C2559';ctx.font='700 30px '+B;
+  try{ctx.letterSpacing='8px';}catch(e){}
+  ctx.fillText('CERTIFICADO DE FINALIZACIÓN',W/2,345);
+  try{ctx.letterSpacing='0px';}catch(e){}
+  ctx.fillStyle='#59608C';ctx.font='700 34px '+B;ctx.fillText('Se otorga a',W/2,425);
+  var px=104;ctx.font='600 '+px+'px '+D;
+  while(ctx.measureText(name).width>1180&&px>40){px-=4;ctx.font='600 '+px+'px '+D;}
+  ctx.fillStyle='#1C2559';ctx.fillText(name,W/2,545);
+  ctx.fillStyle='#FF7B4A';ctx.fillRect(W/2-420,578,840,5);
+  ctx.fillStyle='#59608C';ctx.font='700 34px '+B;ctx.fillText('por completar con éxito el curso',W/2,660);
+  var title=CERTS[k].title;px=64;ctx.font='600 '+px+'px '+D;
+  while(ctx.measureText(title).width>1300&&px>36){px-=2;ctx.font='600 '+px+'px '+D;}
+  ctx.fillStyle='#7B5BE8';ctx.fillText(title,W/2,750);
+  var n=certLessons(k).length;
+  ctx.fillStyle='#59608C';ctx.font='700 28px '+B;
+  ctx.fillText(n+' lecciones con su reto superado en Aprende programación con Yuli',W/2,810);
+  var fecha=certDate(k).toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'});
+  ctx.fillStyle='#1C2559';ctx.font='700 34px '+B;ctx.fillText(fecha,420,930);
+  ctx.fillRect(240,950,360,2);
+  ctx.fillStyle='#59608C';ctx.font='700 24px '+B;ctx.fillText('Fecha',420,990);
+  ctx.fillStyle='#FF7B4A';ctx.font='600 66px '+D;ctx.fillText('Yuli',1180,935);
+  ctx.fillStyle='#1C2559';ctx.fillRect(1000,950,360,2);
+  ctx.fillStyle='#59608C';ctx.font='700 24px '+B;ctx.fillText('Aprende programación con Yuli',1180,990);
+  ctx.font='600 22px '+B;
+  ctx.fillText('Certificado de finalización de la app Aprende programación con Yuli. No es una titulación oficial.',W/2,1050);
+}
+function saveBlob(blob,filename){
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=filename;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},4000);
+}
+function makePdf(jpg,w,h){
+  var enc=new TextEncoder(),parts=[],len=0,offs=[];
+  function add(x){var b=typeof x==='string'?enc.encode(x):x;parts.push(b);len+=b.length;}
+  var pw=842,ph=Math.round(842*h/w);
+  add('%PDF-1.4\n');
+  offs[1]=len;add('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  offs[2]=len;add('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+  offs[3]=len;add('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pw+' '+ph+'] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+  offs[4]=len;add('4 0 obj\n<< /Type /XObject /Subtype /Image /Width '+w+' /Height '+h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpg.length+' >>\nstream\n');
+  add(jpg);add('\nendstream\nendobj\n');
+  var c='q '+pw+' 0 0 '+ph+' 0 0 cm /Im0 Do Q';
+  offs[5]=len;add('5 0 obj\n<< /Length '+c.length+' >>\nstream\n'+c+'\nendstream\nendobj\n');
+  var xr=len,x='xref\n0 6\n0000000000 65535 f \n';
+  for(var i=1;i<=5;i++){x+=('0000000000'+offs[i]).slice(-10)+' 00000 n \n';}
+  x+='trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF\n';
+  add(x);
+  return new Blob(parts,{type:'application/pdf'});
+}
+function fileBase(){
+  return ('Certificado - '+CERTS[certCur].title.split(':')[0]+' - '+S.name).replace(/[\\\/:*?"<>|]/g,'').slice(0,100);
+}
+async function openCert(k){
+  if(!S.name){
+    toast('Primero escribe y guarda tu nombre de registro.');
+    var i=$('#nameInput');if(i){i.scrollIntoView({block:'center'});i.focus();}
+    return;
+  }
+  if(!certDone(k)) return;
+  certCur=k;
+  var dlg=$('#certDlg');
+  $('#certTitle').textContent='Certificado: '+CERTS[k].title.split(':')[0];
+  await drawCert($('#certCanvas'),k,S.name);
+  if(!dlg.open){if(dlg.showModal) dlg.showModal();else dlg.setAttribute('open','');}
+}
+$('#certPng').addEventListener('click',function(){
+  $('#certCanvas').toBlob(function(b){saveBlob(b,fileBase()+'.png');},'image/png');
+});
+$('#certPdf').addEventListener('click',function(){
+  $('#certCanvas').toBlob(async function(b){
+    var buf=new Uint8Array(await b.arrayBuffer());
+    saveBlob(makePdf(buf,1600,1131),fileBase()+'.pdf');
+  },'image/jpeg',0.93);
+});
+$('#certClose').addEventListener('click',function(){$('#certDlg').close();});
+
+/* ---- Google Drive (carpeta privada de la app) ---- */
+var drv={token:'',exp:0,busy:false,pend:false,err:'',fileId:'',timer:0,pending:null};
+var tokenClient=null;
+function loadGis(){
+  return new Promise(function(res,rej){
+    if(window.google&&google.accounts&&google.accounts.oauth2) return res();
+    var s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';s.async=true;
+    s.onload=function(){res();};
+    s.onerror=function(){rej(new Error('Sin internet'));};
+    document.head.appendChild(s);
+  });
+}
+function getToken(){
+  return new Promise(function(res,rej){
+    if(drv.token&&Date.now()<drv.exp-60000) return res(drv.token);
+    loadGis().then(function(){
+      if(!tokenClient){
+        tokenClient=google.accounts.oauth2.initTokenClient({
+          client_id:CID,scope:SCOPE,
+          callback:function(r){if(drv.pending) drv.pending.ok(r);},
+          error_callback:function(e){if(drv.pending) drv.pending.err(e);}
+        });
+      }
+      drv.pending={
+        ok:function(r){
+          if(r.error){rej(new Error(r.error));return;}
+          drv.token=r.access_token;drv.exp=Date.now()+(r.expires_in||3600)*1000;res(drv.token);
+        },
+        err:function(e){rej(new Error((e&&e.type)||'cancelado'));}
+      };
+      tokenClient.requestAccessToken({prompt:''});
+    }).catch(rej);
+  });
+}
+function api(url,opt){
+  opt=opt||{};
+  opt.headers=Object.assign({Authorization:'Bearer '+drv.token},opt.headers||{});
+  return fetch(url,opt).then(function(r){
+    if(r.status===401){drv.token='';throw new Error('La sesión de Google venció. Toca Sincronizar ahora.');}
+    if(r.status===403) throw new Error('Google no dio permiso. Revisa que Google Drive API esté activada.');
+    if(!r.ok) throw new Error('Drive respondió '+r.status);
+    return r;
+  });
+}
+function findFile(){
+  var q=encodeURIComponent("name='progreso.json'");
+  return api('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q='+q+'&fields='+encodeURIComponent('files(id,name)'))
+    .then(function(r){return r.json();}).then(function(j){return (j.files&&j.files[0])||null;});
+}
+function readFile(id){return api('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media').then(function(r){return r.json();});}
+function createFile(data){
+  var b='yuli'+Date.now();
+  var body='--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify({name:'progreso.json',parents:['appDataFolder']})+
+    '\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify(data)+'\r\n--'+b+'--';
+  return api('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},body:body}).then(function(r){return r.json();});
+}
+function updateFile(id,data){
+  return api('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+}
+function payload(){
+  return {v:1,name:S.name||'',done:S.done,doneAt:S.doneAt||{},code:S.code,streak:S.streak,updated:new Date().toISOString()};
+}
+function mergeRemote(r){
+  if(!r||typeof r!=='object') return;
+  var k;
+  for(k in (r.done||{})) S.done[k]=true;
+  S.doneAt=S.doneAt||{};
+  for(k in (r.doneAt||{})){if(!S.doneAt[k]||r.doneAt[k]<S.doneAt[k]) S.doneAt[k]=r.doneAt[k];}
+  for(k in (r.code||{})){if(typeof S.code[k]!=='string') S.code[k]=r.code[k];}
+  if(!S.name&&r.name) S.name=String(r.name).slice(0,60);
+  S.xp=Object.keys(S.done).length*XP_PER;
+}
+function refreshAccount(){
+  var el=$('.acct');
+  if(el&&!cur&&!(document.activeElement&&document.activeElement.id==='nameInput')) el.outerHTML=accountSection();
+}
+function driveSync(interactive,fast){
+  if(!CID||drv.busy) return Promise.resolve();
+  drv.busy=true;drv.err='';drv.pend=false;refreshAccount();
+  return getToken().then(function(){
+    if(fast&&drv.fileId) return null;
+    return findFile().then(function(f){
+      if(!f) return null;
+      drv.fileId=f.id;return readFile(f.id);
+    });
+  }).then(function(remote){
+    mergeRemote(remote);
+    S.drive.on=true;S.drive.last=new Date().toISOString();save();updateHeader();
+    var data=payload();
+    if(drv.fileId) return updateFile(drv.fileId,data);
+    return createFile(data).then(function(j){drv.fileId=j.id;});
+  }).then(function(){
+    drv.busy=false;
+    if(!cur) renderHome();
+    if(interactive) toast('Tu progreso quedó guardado en Drive.');
+  }).catch(function(e){
+    drv.busy=false;
+    var m=String(e&&e.message||e);
+    if(/popup|blocked|closed|cancel|denied/i.test(m)){drv.pend=true;if(interactive) toast('No se conectó con Google Drive.');}
+    else drv.err=m;
+    refreshAccount();
+  });
+}
+function driveSoon(tryToken){
+  if(!CID||!S.drive.on) return;
+  clearTimeout(drv.timer);
+  drv.timer=setTimeout(function(){
+    if(tryToken||(drv.token&&Date.now()<drv.exp-60000)) driveSync(false,true);
+    else{drv.pend=true;refreshAccount();}
+  },tryToken?300:2500);
+}
+
+/* ---- Pantalla de inicio: cuenta, Drive y certificados ---- */
+function nameCard(){
+  return '<div class="card"><h3>Mi nombre de registro</h3><p>Es el nombre que sale en tus certificados. Escríbelo completo, como quieres que aparezca.</p>'+
+    '<div class="row"><label class="sr" for="nameInput">Nombre completo</label>'+
+    '<input id="nameInput" class="in" type="text" maxlength="60" autocomplete="name" placeholder="Tu nombre completo" value="'+attr(S.name||'')+'">'+
+    '<button class="btn primary" type="button" data-act="save-name">Guardar</button></div></div>';
+}
+function driveCard(){
+  if(!CID) return '';
+  var txt,btns;
+  if(!S.drive.on){
+    txt='Guarda tu avance en tu Google Drive para no perderlo si cambias de celular o de navegador.';
+    btns='<button class="btn primary" type="button" data-act="drive-connect">Conectar con Google Drive</button>';
+  }else{
+    if(drv.busy) txt='Sincronizando…';
+    else if(drv.err) txt='No se pudo sincronizar: '+esc(drv.err);
+    else if(drv.pend) txt='Hay cambios sin guardar en Drive. Toca "Sincronizar ahora".';
+    else txt='Guardado en tu Drive ('+ago(S.drive.last)+').';
+    btns='<button class="btn primary" type="button" data-act="drive-sync">Sincronizar ahora</button><button class="btn ghost" type="button" data-act="drive-off">Desconectar</button>';
+  }
+  return '<div class="card" id="driveCard"><h3>Guardar en Google Drive</h3><p aria-live="polite">'+txt+'</p><div class="actions">'+btns+'</div></div>';
+}
+function accountSection(){
+  var certs=['html','css','js','all'].map(function(k){
+    var n=certCount(k),t=certLessons(k).length;
+    return '<li class="cert"><div class="cert-t"><strong>'+esc(CERTS[k].title)+'</strong><small>'+n+' de '+t+' retos</small></div>'+
+      (n===t?'<button class="btn primary sm" type="button" data-act="cert" data-k="'+k+'">Ver certificado</button>':'<span class="xp">Te faltan '+(t-n)+'</span>')+'</li>';
+  }).join('');
+  return '<section class="acct"><h2>Mi cuenta</h2><div class="cards">'+nameCard()+driveCard()+'</div>'+
+    '<h3>Mis certificados</h3><ul class="certs">'+certs+'</ul></section>';
+}
+function handleAct(e){
+  var b=e.target.closest('[data-act]');
+  if(!b) return false;
+  var a=b.getAttribute('data-act');
+  if(a==='save-name'){
+    var v=($('#nameInput').value||'').trim().replace(/\s+/g,' ').slice(0,60);
+    if(!v){toast('Escribe tu nombre completo.');return true;}
+    S.name=v;save();toast('Nombre guardado.');driveSoon(false);return true;
+  }
+  if(a==='cert'){openCert(b.getAttribute('data-k'));return true;}
+  if(a==='install'){
+    if(deferredInstall){
+      deferredInstall.prompt();
+      deferredInstall.userChoice.then(function(){deferredInstall=null;if(!cur) renderHome();});
+    }
+    return true;
+  }
+  if(a==='drive-connect'||a==='drive-sync'){driveSync(true,false);return true;}
+  if(a==='drive-off'){S.drive.on=false;drv.token='';drv.fileId='';save();if(!cur) renderHome();return true;}
+  return false;
+}
 
 /* ---------- Rutas por hash: #html-1, #css-3 ... ---------- */
 function route(){
