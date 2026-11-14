@@ -203,6 +203,9 @@ code{font-family:var(--font-code);font-size:.9em;background:var(--surface-2);pad
 .card p{margin:0 0 12px;color:var(--muted);font-size:15px}
 .card .actions{margin:0}
 .row{display:flex;gap:8px;flex-wrap:wrap}
+.steps{font-size:14px;color:var(--muted)}
+.steps summary{cursor:pointer;font-weight:700;color:var(--fg);min-height:32px;display:flex;align-items:center}
+.steps ol{margin:6px 0 0;padding-left:20px;display:grid;gap:6px}
 .in{flex:1 1 200px;min-width:0;font:600 16px var(--font-body);padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .certs{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
@@ -1085,11 +1088,22 @@ function nameCard(){
     '<button class="btn primary" type="button" data-act="save-name">Guardar</button></div></div>';
 }
 function driveCard(){
-  if(!CID) return '';
+  if(!CID){
+    if(!/[?&]configurar/.test(location.search)) return '';
+    return '<div class="card" id="driveCard"><h3>Guardar en Google Drive</h3>'+
+      '<p>Todavía no está activado. Falta un paso: pegar tu ID de cliente de Google en el archivo <code>config.js</code> de tu repositorio.</p>'+
+      '<details class="steps"><summary>Ver los pasos</summary><ol>'+
+      '<li>Entra a <strong>console.cloud.google.com</strong> y crea un proyecto.</li>'+
+      '<li>En <strong>APIs y servicios → Biblioteca</strong>, activa <strong>Google Drive API</strong>.</li>'+
+      '<li>En <strong>Pantalla de consentimiento de OAuth</strong>, crea la app (público Externo), agrega el permiso <code>drive.appdata</code> y tu correo como usuario de prueba.</li>'+
+      '<li>En <strong>Credenciales</strong>, crea un <strong>ID de cliente de OAuth</strong> tipo Aplicación web. En orígenes autorizados de JavaScript escribe <code>'+esc(location.origin)+'</code>.</li>'+
+      '<li>Copia el ID de cliente (termina en <code>.apps.googleusercontent.com</code>) y pégalo entre las comillas de <code>config.js</code>.</li>'+
+      '</ol></details></div>';
+  }
   var txt,btns;
   if(!S.drive.on){
-    txt='Guarda tu avance en tu Google Drive para no perderlo si cambias de celular o de navegador.';
-    btns='<button class="btn primary" type="button" data-act="drive-connect">Conectar con Google Drive</button>';
+    txt='Elige tu cuenta de Google y tu avance queda guardado en tu Drive. Así no lo pierdes si cambias de celular.';
+    btns='<button class="btn primary" type="button" data-act="drive-connect">Guardar mi avance con Google</button>';
   }else{
     if(drv.busy) txt='Sincronizando…';
     else if(drv.err) txt='No se pudo sincronizar: '+esc(drv.err);
