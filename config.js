@@ -5,5 +5,5 @@
    (es un texto largo que termina en .apps.googleusercontent.com), entre las comillas.
    Mientras esté vacío, la app funciona igual y el progreso se guarda solo en el dispositivo. */
 window.YULI_CONFIG = {
-  googleClientId: ''
+  googleClientId: '287992984296-tbdmbv1oq41vd2p2k2ocbivkcjbgb7g4.apps.googleusercontent.com'
 };
